@@ -14,35 +14,35 @@ interface ProductCardProps {
 export function ProductCard({ product, onClick }: ProductCardProps) {
   return (
     <Card 
-      className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col"
+      className="group overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col bg-card hover:bg-accent/5"
       onClick={() => onClick(product)}
     >
-      <div className="aspect-[4/3] relative overflow-hidden">
+      <div className="aspect-square relative overflow-hidden bg-background">
         <img 
           src={product.image} 
           alt={product.title}
-          className="object-cover w-full h-full transition-transform hover:scale-105 duration-300"
+          className="object-contain w-full h-full p-4 transition-transform duration-300 group-hover:scale-110"
         />
         {product.discountPercentage && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-medium py-1 px-2 rounded-full">
+          <div className="absolute top-2 right-2 bg-destructive/90 text-destructive-foreground text-xs font-semibold py-1 px-2 rounded-full">
             {product.discountPercentage}% OFF
           </div>
         )}
       </div>
-      <CardContent className="pt-4 flex-grow">
+      <CardContent className="pt-4 flex-grow space-y-3">
         <div className="space-y-2">
-          <div>
-            <Badge variant="outline" className="capitalize bg-primary/10">
-              {product.category}
-            </Badge>
-          </div>
-          <h3 className="font-semibold text-sm line-clamp-2">{product.title}</h3>
-          <div className="flex items-center justify-between">
-            <p className="font-medium">
+          <Badge variant="secondary" className="capitalize font-medium">
+            {product.category}
+          </Badge>
+          <h3 className="font-semibold text-base line-clamp-2 leading-tight">
+            {product.title}
+          </h3>
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-lg">
               {formatCurrency(product.price)}
             </p>
           </div>
-          <StarRating rating={product.rating?.rate || 0} />
+          <StarRating rating={product.rating?.rate || 0} size={16} />
         </div>
       </CardContent>
       <CardFooter className="pt-0 pb-4">

@@ -1,18 +1,18 @@
 
-import { LucideProps } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import { LucideIcon, LucideProps } from "lucide-react";
+import * as icons from "lucide-react";
 
-interface IconProps extends LucideProps {
-  name: keyof typeof LucideIcons;
+interface IconProps extends Omit<LucideProps, 'ref'> {
+  name: keyof typeof icons;
 }
 
 export function Icon({ name, ...props }: IconProps) {
-  const LucideIcon = LucideIcons[name];
+  const Icon = icons[name] as LucideIcon;
   
-  if (!LucideIcon) {
+  if (!Icon) {
     console.error(`Icon "${name}" not found in lucide-react`);
     return null;
   }
   
-  return <LucideIcon {...props} />;
+  return <Icon {...props} />;
 }
