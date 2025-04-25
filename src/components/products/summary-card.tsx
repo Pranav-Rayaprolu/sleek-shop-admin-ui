@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/icon";
-import { LucideIcon } from "lucide-react";
 
 interface TrendData {
   value: string;
@@ -15,7 +14,7 @@ interface SummaryCardProps {
   title: string;
   value: string;
   subtitle?: string;
-  icon: keyof typeof import("lucide-react");
+  icon: string;
   trend?: TrendData;
 }
 
