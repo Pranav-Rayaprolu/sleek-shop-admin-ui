@@ -24,7 +24,7 @@ export default function Settings() {
   const [user, setUser] = useState<User>({
     id: "user-1",
     name: "Admin User",
-    email: "admin@sleekshop.com",
+    email: "admin@primestore.com",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
     role: "Administrator",
   });

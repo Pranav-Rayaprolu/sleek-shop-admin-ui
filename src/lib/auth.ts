@@ -1,6 +1,6 @@
 // Constants
-const TOKEN_KEY = 'sleekshop_auth_token';
-const MOCK_EMAIL = 'admin@sleekshop.com';
+const TOKEN_KEY = 'primestore_auth_token';
+const MOCK_EMAIL = 'admin@primestore.com';
 const MOCK_PASSWORD = 'admin123';
 
 // Types

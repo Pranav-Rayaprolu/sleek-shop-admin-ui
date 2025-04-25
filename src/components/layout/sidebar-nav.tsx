@@ -101,7 +101,7 @@ export function SidebarNav({ onCollapseChange }: SidebarNavProps) {
         <div className="flex items-center h-16 px-4 border-b">
           {!collapsed && (
             <Link to="/" className="font-bold text-lg text-primary">
-              SleekShop
+              PrimeStore
             </Link>
           )}
         </div>
@@ -144,7 +144,7 @@ export function SidebarNav({ onCollapseChange }: SidebarNavProps) {
         <div className="mt-auto p-4">
           {!collapsed && (
             <div className="text-xs text-muted-foreground">
-              <p>SleekShop Admin v1.0</p>
+              <p>PrimeStore Admin v1.0</p>
             </div>
           )}
         </div>

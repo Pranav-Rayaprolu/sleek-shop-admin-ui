@@ -38,8 +38,8 @@ export default function Login() {
     try {
       await loginUser(credentials);
       toast({
-        title: "Login successful",
-        description: "Welcome to SleekShop Admin Dashboard",
+        title: "Welcome back",
+        description: "Welcome to PrimeStore Admin Dashboard",
       });
       navigate("/");
     } catch (error) {
@@ -62,9 +62,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
-              <h1 className="text-3xl font-bold tracking-tight text-primary">
-                SleekShop
-              </h1>
+              <h1 className="text-xl font-bold tracking-tight">PrimeStore</h1>
             </div>
             <CardTitle className="text-2xl">Admin Login</CardTitle>
             <CardDescription>
@@ -78,7 +76,7 @@ export default function Login() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="admin@sleekshop.com"
+                placeholder="admin@primestore.com"
                 value={credentials.email}
                 onChange={handleChange}
                 required
@@ -104,8 +102,8 @@ export default function Login() {
                 onChange={handleChange}
                 required
               />
-              <p className="text-xs text-muted-foreground pt-1">
-                For demo purposes, use: admin@sleekshop.com / admin123
+              <p className="px-6 text-center text-sm text-muted-foreground">
+                For demo purposes, use: admin@primestore.com / admin123
               </p>
             </div>
           </CardContent>

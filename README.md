@@ -1,8 +1,8 @@
-# Sleek Shop Admin UI
+# PrimeStore Admin UI
 
-A professional-grade e-commerce admin dashboard built with modern frontend technologies.
+A modern admin dashboard for e-commerce stores with a beautiful and responsive UI.
 
-![Sleek Shop Admin UI](./public/preview.png)
+![PrimeStore Admin UI](./public/preview.png)
 
 <!-- Note: Replace preview.png with an actual screenshot of your application before deployment -->
 
@@ -36,10 +36,10 @@ A professional-grade e-commerce admin dashboard built with modern frontend techn
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/sleek-shop-admin-ui.git
+git clone https://github.com/yourusername/primestore-admin-ui.git
 
 # Navigate to the project directory
-cd sleek-shop-admin-ui
+cd primestore-admin-ui
 
 # Install dependencies
 npm install
