@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Product } from "@/types";
-import { Star, Heart } from "lucide-react";
+import { Star, Heart, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/api";
@@ -8,15 +8,22 @@ import { formatCurrency } from "@/lib/api";
 interface ProductCardProps {
   product: Product;
   onClick: (product: Product) => void;
+  onEdit?: (product: Product) => void;
+  onDelete?: (product: Product) => void;
 }
 
-export function ProductCard({ product, onClick }: ProductCardProps) {
+export function ProductCard({
+  product,
+  onClick,
+  onEdit,
+  onDelete,
+}: ProductCardProps) {
   return (
-    <Card
-      className="overflow-hidden h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow"
-      onClick={() => onClick(product)}
-    >
-      <div className="relative aspect-square bg-secondary/20 flex items-center justify-center overflow-hidden group">
+    <Card className="overflow-hidden h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow relative group">
+      <div
+        className="relative aspect-square bg-secondary/20 flex items-center justify-center overflow-hidden group"
+        onClick={() => onClick(product)}
+      >
         <img
           src={product.image || product.thumbnail}
           alt={product.title}
@@ -51,7 +58,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         </Badge>
       </div>
 
-      <CardContent className="flex-1 p-4">
+      <CardContent className="flex-1 p-4" onClick={() => onClick(product)}>
         <div className="space-y-3">
           <div>
             <p className="text-xs text-muted-foreground capitalize">
@@ -80,17 +87,49 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
 
       <CardFooter className="px-4 py-3 border-t flex justify-between items-center">
         <p className="font-semibold">{formatCurrency(product.price)}</p>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 text-xs"
-          onClick={(e) => {
-            e.stopPropagation();
-            // View details (redundant as card click also handles this)
-          }}
-        >
-          View Details
-        </Button>
+        <div className="flex gap-2">
+          {onEdit && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(product);
+              }}
+            >
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </Button>
+          )}
+
+          {onDelete && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(product);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">Delete</span>
+            </Button>
+          )}
+
+          <Button
+            variant="default"
+            size="sm"
+            className="h-8 text-xs"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(product);
+            }}
+          >
+            View
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

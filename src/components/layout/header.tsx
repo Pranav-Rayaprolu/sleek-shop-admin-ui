@@ -63,7 +63,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-10 h-16 border-b bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-30 h-16 border-b bg-background/95 backdrop-blur supports-backdrop-blur:bg-background/60">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6">
         <div>
           <h1 className="text-xl font-semibold">{getPageTitle()}</h1>
