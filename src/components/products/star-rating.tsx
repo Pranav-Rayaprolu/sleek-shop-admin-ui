@@ -12,7 +12,7 @@ export function StarRating({ rating, maxRating = 5, className }: StarRatingProps
   // Calculate the filled and empty portions
   const filledStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
-  const emptyStars = Math.floor(maxRating - rating);
+  const emptyStars = Math.floor(maxRating - rating - (hasHalfStar ? 1 : 0));
   
   return (
     <div className={cn("flex items-center", className)}>

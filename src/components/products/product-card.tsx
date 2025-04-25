@@ -2,8 +2,9 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { StarRating } from "@/components/products/star-rating";
 import { StockBadge } from "@/components/products/stock-badge";
-import { formatCurrency } from "@/lib/data";
+import { formatCurrency } from "@/lib/api";
 import { Product } from "@/types";
+import { Badge } from "@/components/ui/badge";
 
 interface ProductCardProps {
   product: Product;
@@ -18,7 +19,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     >
       <div className="aspect-[4/3] relative overflow-hidden">
         <img 
-          src={product.thumbnail} 
+          src={product.image} 
           alt={product.title}
           className="object-cover w-full h-full transition-transform hover:scale-105 duration-300"
         />
@@ -31,22 +32,17 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
       <CardContent className="pt-4 flex-grow">
         <div className="space-y-2">
           <div>
-            <span className={`category-badge category-${product.category}`}>
+            <Badge variant="outline" className="capitalize bg-primary/10">
               {product.category}
-            </span>
+            </Badge>
           </div>
           <h3 className="font-semibold text-sm line-clamp-2">{product.title}</h3>
           <div className="flex items-center justify-between">
             <p className="font-medium">
               {formatCurrency(product.price)}
-              {product.discountPercentage && (
-                <span className="text-xs text-muted-foreground line-through ml-2">
-                  {formatCurrency(Math.round(product.price / (1 - product.discountPercentage / 100)))}
-                </span>
-              )}
             </p>
           </div>
-          <StarRating rating={product.rating} />
+          <StarRating rating={product.rating?.rate || 0} />
         </div>
       </CardContent>
       <CardFooter className="pt-0 pb-4">

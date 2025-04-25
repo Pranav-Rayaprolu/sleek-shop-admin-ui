@@ -8,6 +8,8 @@ import { Slider } from "@/components/ui/slider";
 import { Category, FilterOptions } from "@/types";
 import { Star, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { formatCurrency } from "@/lib/api";
 
 interface ProductFilterProps {
   maxPrice: number;
@@ -25,7 +27,7 @@ export function ProductFilter({
   const [search, setSearch] = useState(filterOptions.search);
   const [category, setCategory] = useState<Category | null>(filterOptions.category);
   const [minRating, setMinRating] = useState(filterOptions.minRating);
-  const [priceRange, setPriceRange] = useState([filterOptions.minPrice, filterOptions.maxPrice]);
+  const [priceRange, setPriceRange] = useState([filterOptions.minPrice, filterOptions.maxPrice || maxPrice]);
   
   // Rate Change Function
   const handleRatingClick = (rating: number) => {
@@ -129,7 +131,7 @@ export function ProductFilter({
           value={priceRange}
           min={0}
           max={maxPrice}
-          step={100}
+          step={10}
           onValueChange={setPriceRange}
           className="py-4"
         />
@@ -137,6 +139,3 @@ export function ProductFilter({
     </div>
   );
 }
-
-import { cn } from "@/lib/utils";
-import { formatCurrency } from "@/lib/data";

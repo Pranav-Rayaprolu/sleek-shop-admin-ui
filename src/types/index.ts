@@ -1,26 +1,23 @@
 
-export type Category = 
-  | "electronics" 
-  | "clothing" 
-  | "home" 
-  | "beauty" 
-  | "books" 
-  | "sports" 
-  | "food";
+export type Category = string;
 
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   description: string;
   price: number;
   discountPercentage?: number;
-  rating: number;
+  rating: {
+    rate: number;
+    count: number;
+  };
   stock: number;
   category: Category;
   thumbnail: string;
-  images: string[];
-  createdAt: string;
-  updatedAt: string;
+  image: string;
+  images?: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface AnalyticsSummary {
