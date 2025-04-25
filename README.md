@@ -2,7 +2,7 @@
 
 A modern admin dashboard for e-commerce stores with a beautiful and responsive UI.
 
-![PrimeStore Admin UI](./public/preview.png)
+
 
 <!-- Note: Replace preview.png with an actual screenshot of your application before deployment -->
 
