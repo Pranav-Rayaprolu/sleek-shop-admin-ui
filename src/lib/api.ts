@@ -1,5 +1,4 @@
-
-import { Product, Category } from "@/types";
+import { AnalyticsSummary, Category, Product } from "@/types";
 
 const BASE_URL = "https://fakestoreapi.com";
 

@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Pagination,
+  Pagination as UIPagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
@@ -9,13 +9,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-interface PaginationProps {
+interface ProductPaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange }: ProductPaginationProps) {
   // Generate page numbers with ellipsis for large numbers of pages
   const getPageNumbers = () => {
     const pages = [];
@@ -56,7 +56,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   };
 
   return (
-    <Pagination>
+    <UIPagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious 
@@ -87,6 +87,6 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           />
         </PaginationItem>
       </PaginationContent>
-    </Pagination>
+    </UIPagination>
   );
 }

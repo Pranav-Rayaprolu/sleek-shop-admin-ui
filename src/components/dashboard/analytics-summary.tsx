@@ -22,7 +22,7 @@ export function AnalyticsSummary() {
       />
       <SummaryCard
         title="Highest Rated Product"
-        value={analytics.highestRatedProduct.rating || 0}
+        value={analytics.highestRatedProduct.rating?.rate || 0}
         description={analytics.highestRatedProduct.title}
         icon={<Star className="h-5 w-5" />}
       />

@@ -3,16 +3,16 @@ import { LucideProps } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 
 interface IconProps extends LucideProps {
-  name: string;
+  name: keyof typeof LucideIcons;
 }
 
 export function Icon({ name, ...props }: IconProps) {
-  const IconComponent = LucideIcons[name as keyof typeof LucideIcons];
+  const LucideIcon = LucideIcons[name];
   
-  if (!IconComponent) {
-    // Fallback to a default icon or null
+  if (!LucideIcon) {
+    console.error(`Icon "${name}" not found in lucide-react`);
     return null;
   }
   
-  return <IconComponent {...props} />;
+  return <LucideIcon {...props} />;
 }
