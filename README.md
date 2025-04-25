@@ -1,73 +1,149 @@
-# Welcome to your Lovable project
+# Sleek Shop Admin UI
 
-## Project info
+A professional-grade e-commerce admin dashboard built with modern frontend technologies.
 
-**URL**: https://lovable.dev/projects/c6184530-bd97-4565-8683-b8d1377ff11c
+![Sleek Shop Admin UI](./public/preview.png)
 
-## How can I edit this code?
+<!-- Note: Replace preview.png with an actual screenshot of your application before deployment -->
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Modern, Responsive UI**: Clean and professional interface that works across all device sizes
+- **Product Management**: Browse, filter, search, and view product details
+- **Data Visualization**: Analytics dashboard with interactive charts
+- **Theme Toggle**: Switch between light and dark modes
+- **User Settings**: Profile, notification, and security management
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c6184530-bd97-4565-8683-b8d1377ff11c) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **React 18** with TypeScript
+- **Vite** for fast development and optimized builds
+- **TanStack Query (React Query)** for server state management
+- **React Router** for navigation
+- **Tailwind CSS** for styling
+- **Shadcn UI** (based on Radix UI primitives) for UI components
+- **Recharts** for data visualization
+- **Lucide React** for icons
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js 18+
+- npm or pnpm or bun
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/sleek-shop-admin-ui.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd sleek-shop-admin-ui
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Install dependencies
+npm install
+# or
+pnpm install
+# or
+bun install
 ```
 
-**Edit a file directly in GitHub**
+### Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Start the development server
+npm run dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-**Use GitHub Codespaces**
+Visit `http://localhost:5173` to view the application.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Build
 
-## What technologies are used for this project?
+```bash
+# Build for production
+npm run build
+# or
+pnpm build
+# or
+bun build
+```
 
-This project is built with:
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+├── components/       # Reusable UI components
+│   ├── dashboard/    # Dashboard-specific components
+│   ├── layout/       # Layout components (header, sidebar)
+│   ├── products/     # Product-related components
+│   ├── ui/           # Shadcn UI components
+│   └── theme-provider.tsx
+├── hooks/            # Custom React hooks
+├── lib/              # Utility functions and API calls
+├── pages/            # Page components
+│   ├── Dashboard.tsx
+│   ├── Products.tsx
+│   ├── ProductDetail.tsx
+│   ├── Analytics.tsx
+│   ├── Settings.tsx
+│   └── NotFound.tsx
+├── types/            # TypeScript type definitions
+├── App.tsx           # Main application component
+└── main.tsx          # Application entry point
+```
 
-## How can I deploy this project?
+## Features
 
-Simply open [Lovable](https://lovable.dev/projects/c6184530-bd97-4565-8683-b8d1377ff11c) and click on Share -> Publish.
+### Dashboard
 
-## Can I connect a custom domain to my Lovable project?
+- Overview of store performance
+- Summary cards with key metrics
+- Recent products list
 
-Yes, you can!
+### Products
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Grid view of all products
+- Filter by category, price range, and rating
+- Search functionality
+- Pagination
+- Detailed product view
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Analytics
+
+- Interactive charts for sales and revenue
+- Product category distribution
+- Price range distribution
+- Top-rated products
+
+### Settings
+
+- User profile management
+- Notification preferences
+- Appearance settings
+- Security settings
+
+## API
+
+This project uses the [Fake Store API](https://fakestoreapi.com/) for product data:
+
+- GET `/products` - Fetch all products
+- GET `/products/:id` - Fetch a single product
+- GET `/products/categories` - Fetch all categories
+- GET `/products/category/:category` - Filter products by category
+
+## License
+
+MIT
+
+## Acknowledgements
+
+- [Shadcn UI](https://ui.shadcn.com)
+- [Tailwind CSS](https://tailwindcss.com)
+- [TanStack Query](https://tanstack.com/query)
+- [React Router](https://reactrouter.com)
+- [Fake Store API](https://fakestoreapi.com)

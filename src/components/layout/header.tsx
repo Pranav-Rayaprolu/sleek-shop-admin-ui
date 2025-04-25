@@ -1,42 +1,52 @@
-
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider";
 import { Bell, LogOut, Moon, Sun, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { currentUser } from "@/lib/data";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { logoutUser } from "@/lib/auth";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const { pathname } = useLocation();
-  
+  const navigate = useNavigate();
+
   const getPageTitle = () => {
-    switch(pathname) {
-      case '/':
+    switch (pathname) {
+      case "/":
         return "Dashboard";
-      case '/products':
+      case "/products":
         return "Products";
-      case '/analytics':
+      case "/analytics":
         return "Analytics";
-      case '/settings':
+      case "/settings":
         return "Settings";
       default:
         return "Dashboard";
     }
   };
-  
+
   const handleLogout = () => {
+    logoutUser();
     toast({
       title: "Logged out",
       description: "You have been logged out successfully",
     });
+    navigate("/login");
   };
-  
+
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
     toast({
@@ -44,7 +54,7 @@ export function Header() {
       description: `Theme switched to ${theme === "light" ? "dark" : "light"} mode`,
     });
   };
-  
+
   const handleNotifications = () => {
     toast({
       title: "Notifications",
@@ -59,28 +69,37 @@ export function Header() {
           <h1 className="text-xl font-semibold">{getPageTitle()}</h1>
         </div>
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={handleNotifications}
             className="relative"
             aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={toggleTheme}
-            aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+            aria-label={
+              theme === "light" ? "Switch to dark mode" : "Switch to light mode"
+            }
           >
-            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            {theme === "light" ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                 <Avatar className="h-9 w-9">
-                  <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                  <AvatarImage
+                    src={currentUser.avatar}
+                    alt={currentUser.name}
+                  />
                   <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </Button>
@@ -89,7 +108,9 @@ export function Header() {
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium">{currentUser.name}</p>
-                  <p className="text-xs text-muted-foreground">{currentUser.email}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {currentUser.email}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

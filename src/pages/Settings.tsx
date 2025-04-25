@@ -1,174 +1,422 @@
-
 "use client";
 
-import { useTheme } from "@/components/theme-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { User, Settings as ISettings } from "@/types";
 
 export default function Settings() {
-  const { theme, setTheme } = useTheme();
   const { toast } = useToast();
-  
-  const handleSave = () => {
+
+  const [user, setUser] = useState<User>({
+    id: "user-1",
+    name: "Admin User",
+    email: "admin@sleekshop.com",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
+    role: "Administrator",
+  });
+
+  const [settings, setSettings] = useState<ISettings>({
+    notifications: {
+      email: true,
+      push: false,
+      orderUpdates: true,
+      inventoryAlerts: true,
+      marketingEmails: false,
+    },
+    appearance: {
+      theme: "light",
+      compactMode: false,
+      animatedTransitions: true,
+    },
+    security: {
+      twoFactorAuth: false,
+      sessionTimeout: 30,
+    },
+  });
+
+  const handleUserUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
     toast({
-      title: "Settings saved",
-      description: "Your preferences have been updated successfully.",
+      title: "Profile Updated",
+      description: "Your profile information has been updated successfully.",
     });
+  };
+
+  const handleSettingsUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Settings Saved",
+      description: "Your preference settings have been saved.",
+    });
+  };
+
+  const handleToggleNotification = (key: keyof ISettings["notifications"]) => {
+    setSettings((prev) => ({
+      ...prev,
+      notifications: {
+        ...prev.notifications,
+        [key]: !prev.notifications[key],
+      },
+    }));
+  };
+
+  const handleToggleAppearance = (key: keyof ISettings["appearance"]) => {
+    if (key === "theme") {
+      setSettings((prev) => ({
+        ...prev,
+        appearance: {
+          ...prev.appearance,
+          theme: prev.appearance.theme === "light" ? "dark" : "light",
+        },
+      }));
+    } else {
+      setSettings((prev) => ({
+        ...prev,
+        appearance: {
+          ...prev.appearance,
+          [key]: !prev.appearance[key as keyof typeof prev.appearance],
+        },
+      }));
+    }
+  };
+
+  const handleToggleSecurity = (key: keyof ISettings["security"]) => {
+    if (key === "sessionTimeout") return;
+    setSettings((prev) => ({
+      ...prev,
+      security: {
+        ...prev.security,
+        [key]: !prev.security[key as keyof typeof prev.security],
+      },
+    }));
+  };
+
+  const handleSessionTimeoutChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const timeout = parseInt(e.target.value);
+    if (isNaN(timeout)) return;
+
+    setSettings((prev) => ({
+      ...prev,
+      security: {
+        ...prev.security,
+        sessionTimeout: timeout,
+      },
+    }));
   };
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           Manage your account settings and preferences
         </p>
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border-l-4 border-l-primary">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-primary"></span>
-              Appearance
-            </CardTitle>
-            <CardDescription>
-              Customize how the admin dashboard looks and feels
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <Label className="text-base">Theme</Label>
-              <RadioGroup 
-                defaultValue={theme} 
-                onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}
-                className="grid grid-cols-3 gap-4"
-              >
-                <div className="flex flex-col items-center space-y-2">
-                  <div className={`relative rounded-md border-2 p-1 ${theme === "light" ? "border-primary" : "border-muted"}`}>
-                    <div className="h-20 w-24 rounded bg-background">
-                      <div className="h-3 w-full rounded-t bg-primary/10"></div>
-                      <div className="mx-1 mt-1 h-2 w-10 rounded bg-muted"></div>
+
+      <Tabs defaultValue="profile" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="preferences">Preferences</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+        </TabsList>
+
+        {/* Profile Settings Tab */}
+        <TabsContent value="profile">
+          <Card>
+            <form onSubmit={handleUserUpdate}>
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+                <CardDescription>
+                  Manage your personal information
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="h-20 w-20 rounded-full overflow-hidden bg-secondary flex items-center justify-center">
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <Button variant="outline" size="sm" type="button">
+                      Change Avatar
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      value={user.name}
+                      onChange={(e) =>
+                        setUser({ ...user, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={user.email}
+                      onChange={(e) =>
+                        setUser({ ...user, email: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="role">Role</Label>
+                    <Input id="role" value={user.role} disabled />
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter className="border-t bg-muted/50 px-6 py-4">
+                <Button>Save Changes</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+
+        {/* Preferences Tab */}
+        <TabsContent value="preferences">
+          <Card>
+            <form onSubmit={handleSettingsUpdate}>
+              <CardHeader>
+                <CardTitle>Preferences</CardTitle>
+                <CardDescription>
+                  Manage your notification and appearance settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Notifications</h3>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="email-notifications">
+                        Email Notifications
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive email notifications
+                      </p>
+                    </div>
+                    <Switch
+                      id="email-notifications"
+                      checked={settings.notifications.email}
+                      onCheckedChange={() => handleToggleNotification("email")}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="push-notifications">
+                        Push Notifications
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        Receive push notifications
+                      </p>
+                    </div>
+                    <Switch
+                      id="push-notifications"
+                      checked={settings.notifications.push}
+                      onCheckedChange={() => handleToggleNotification("push")}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="order-updates">Order Updates</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Get notified about order status changes
+                      </p>
+                    </div>
+                    <Switch
+                      id="order-updates"
+                      checked={settings.notifications.orderUpdates}
+                      onCheckedChange={() =>
+                        handleToggleNotification("orderUpdates")
+                      }
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="inventory-alerts">Inventory Alerts</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Get notified when products are running low on stock
+                      </p>
+                    </div>
+                    <Switch
+                      id="inventory-alerts"
+                      checked={settings.notifications.inventoryAlerts}
+                      onCheckedChange={() =>
+                        handleToggleNotification("inventoryAlerts")
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Appearance</h3>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="theme">Theme</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Switch between light and dark mode
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">Light</span>
+                      <Switch
+                        id="theme"
+                        checked={settings.appearance.theme === "dark"}
+                        onCheckedChange={() => handleToggleAppearance("theme")}
+                      />
+                      <span className="text-sm">Dark</span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="light" id="light" />
-                    <Label htmlFor="light" className="font-normal cursor-pointer">Light</Label>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="compact-mode">Compact Mode</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Display content in a more condensed format
+                      </p>
+                    </div>
+                    <Switch
+                      id="compact-mode"
+                      checked={settings.appearance.compactMode}
+                      onCheckedChange={() =>
+                        handleToggleAppearance("compactMode")
+                      }
+                    />
                   </div>
                 </div>
-                
-                <div className="flex flex-col items-center space-y-2">
-                  <div className={`relative rounded-md border-2 p-1 ${theme === "dark" ? "border-primary" : "border-muted"}`}>
-                    <div className="h-20 w-24 rounded bg-slate-950">
-                      <div className="h-3 w-full rounded-t bg-primary/30"></div>
-                      <div className="mx-1 mt-1 h-2 w-10 rounded bg-slate-800"></div>
+              </CardContent>
+              <CardFooter className="border-t bg-muted/50 px-6 py-4">
+                <Button>Save Preferences</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+
+        {/* Security Tab */}
+        <TabsContent value="security">
+          <Card>
+            <form onSubmit={handleSettingsUpdate}>
+              <CardHeader>
+                <CardTitle>Security</CardTitle>
+                <CardDescription>
+                  Manage your account security settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="2fa">Two-Factor Authentication</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Add an extra layer of security to your account
+                      </p>
+                    </div>
+                    <Switch
+                      id="2fa"
+                      checked={settings.security.twoFactorAuth}
+                      onCheckedChange={() =>
+                        handleToggleSecurity("twoFactorAuth")
+                      }
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="session-timeout">
+                      Session Timeout (minutes)
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Automatically log out after a period of inactivity
+                    </p>
+                    <Input
+                      id="session-timeout"
+                      type="number"
+                      min="5"
+                      max="120"
+                      value={settings.security.sessionTimeout}
+                      onChange={handleSessionTimeoutChange}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="current-password">Current Password</Label>
+                    <Input
+                      id="current-password"
+                      type="password"
+                      placeholder="Enter your current password"
+                    />
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="new-password">New Password</Label>
+                      <Input
+                        id="new-password"
+                        type="password"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password">Confirm Password</Label>
+                      <Input
+                        id="confirm-password"
+                        type="password"
+                        placeholder="Confirm new password"
+                      />
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="dark" id="dark" />
-                    <Label htmlFor="dark" className="font-normal cursor-pointer">Dark</Label>
-                  </div>
                 </div>
-                
-                <div className="flex flex-col items-center space-y-2">
-                  <div className={`relative rounded-md border-2 p-1 ${theme === "system" ? "border-primary" : "border-muted"}`}>
-                    <div className="h-20 w-24 rounded bg-gradient-to-b from-background to-slate-900">
-                      <div className="h-3 w-full rounded-t bg-primary/20"></div>
-                      <div className="mx-1 mt-1 h-2 w-10 rounded bg-slate-400"></div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="system" id="system" />
-                    <Label htmlFor="system" className="font-normal cursor-pointer">System</Label>
-                  </div>
-                </div>
-              </RadioGroup>
-            </div>
-            
-            <Separator className="my-6" />
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="notifications" className="text-base">Notifications</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Receive notifications about product updates
-                  </p>
-                </div>
-                <Switch id="notifications" defaultChecked />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="analytics" className="text-base">Analytics Sharing</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Share anonymous usage data to improve our product
-                  </p>
-                </div>
-                <Switch id="analytics" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-l-4 border-l-blue-500">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-              Account Preferences
-            </CardTitle>
-            <CardDescription>
-              Manage your account settings and email preferences
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="marketing" className="text-base">Marketing emails</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Receive emails about new products and features
-                  </p>
-                </div>
-                <Switch id="marketing" defaultChecked />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="updates" className="text-base">Product updates</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Get notified when we release new features
-                  </p>
-                </div>
-                <Switch id="updates" defaultChecked />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="security" className="text-base">Security alerts</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Get important security notifications
-                  </p>
-                </div>
-                <Switch id="security" defaultChecked />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <div className="md:col-span-2 flex justify-end">
-          <Button onClick={handleSave} size="lg" className="px-8">Save Changes</Button>
-        </div>
-      </div>
+              </CardContent>
+              <CardFooter className="border-t bg-muted/50 px-6 py-4 flex justify-between">
+                <Button variant="destructive" type="button">
+                  Delete Account
+                </Button>
+                <Button>Save Security Settings</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-
 export type Category = string;
 
 export interface Product {
@@ -44,4 +43,23 @@ export interface User {
   email: string;
   avatar: string;
   role: string;
+}
+
+export interface Settings {
+  notifications: {
+    email: boolean;
+    push: boolean;
+    orderUpdates: boolean;
+    inventoryAlerts: boolean;
+    marketingEmails: boolean;
+  };
+  appearance: {
+    theme: 'light' | 'dark';
+    compactMode: boolean;
+    animatedTransitions: boolean;
+  };
+  security: {
+    twoFactorAuth: boolean;
+    sessionTimeout: number;
+  };
 }

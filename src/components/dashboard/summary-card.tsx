@@ -1,46 +1,51 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import { ReactNode } from "react";
 
-interface SummaryCardProps {
+export interface SummaryCardProps {
   title: string;
-  value: string | number;
-  description?: string;
-  icon: React.ReactNode;
-  className?: string;
+  value: string;
+  icon: ReactNode;
   trend?: {
-    value: number;
+    value: string;
     isPositive: boolean;
+    label: string;
   };
+  subtitle?: string;
 }
 
 export function SummaryCard({
   title,
   value,
-  description,
   icon,
-  className,
-  trend
+  trend,
+  subtitle,
 }: SummaryCardProps) {
   return (
-    <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+    <Card>
+      <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="h-9 w-9 bg-primary/10 rounded-md flex items-center justify-center text-primary">
-          {icon}
-        </div>
+        {icon}
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        {description && <p className="text-xs text-muted-foreground pt-1">{description}</p>}
+        {subtitle && (
+          <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+        )}
         {trend && (
-          <div className={cn(
-            "flex items-center text-xs mt-2",
-            trend.isPositive ? "text-green-500" : "text-red-500"
-          )}>
-            {trend.isPositive ? "↑" : "↓"} {trend.value}%
-            <span className="text-muted-foreground ml-1">from last month</span>
-          </div>
+          <p className="text-xs mt-1">
+            <span
+              className={`inline-flex items-center ${trend.isPositive ? "text-green-600" : "text-red-600"}`}
+            >
+              {trend.isPositive ? (
+                <ArrowUpIcon className="h-3 w-3 mr-1" />
+              ) : (
+                <ArrowDownIcon className="h-3 w-3 mr-1" />
+              )}
+              {trend.value}
+            </span>{" "}
+            <span className="text-muted-foreground">{trend.label}</span>
+          </p>
         )}
       </CardContent>
     </Card>

@@ -1,10 +1,9 @@
-
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { StarRating } from "@/components/products/star-rating";
-import { StockBadge } from "@/components/products/stock-badge";
-import { formatCurrency } from "@/lib/api";
 import { Product } from "@/types";
+import { Star, Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/api";
 
 interface ProductCardProps {
   product: Product;
@@ -13,40 +12,85 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onClick }: ProductCardProps) {
   return (
-    <Card 
-      className="group overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col bg-card hover:bg-accent/5"
+    <Card
+      className="overflow-hidden h-full flex flex-col cursor-pointer hover:shadow-md transition-shadow"
       onClick={() => onClick(product)}
     >
-      <div className="aspect-square relative overflow-hidden bg-background">
-        <img 
-          src={product.image} 
+      <div className="relative aspect-square bg-secondary/20 flex items-center justify-center overflow-hidden group">
+        <img
+          src={product.image || product.thumbnail}
           alt={product.title}
-          className="object-contain w-full h-full p-4 transition-transform duration-300 group-hover:scale-110"
+          className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
         />
-        {product.discountPercentage && (
-          <div className="absolute top-2 right-2 bg-destructive/90 text-destructive-foreground text-xs font-semibold py-1 px-2 rounded-full">
-            {product.discountPercentage}% OFF
-          </div>
-        )}
+        <Button
+          size="icon"
+          variant="ghost"
+          className="absolute top-2 right-2 h-8 w-8 rounded-full bg-background/80 opacity-80 hover:opacity-100"
+          onClick={(e) => {
+            e.stopPropagation();
+            // Add to favorites (not implemented)
+          }}
+        >
+          <Heart className="h-4 w-4" />
+        </Button>
+        <Badge
+          className="absolute top-2 left-2"
+          variant={
+            product.stock > 10
+              ? "secondary"
+              : product.stock > 0
+                ? "outline"
+                : "destructive"
+          }
+        >
+          {product.stock > 10
+            ? "In Stock"
+            : product.stock > 0
+              ? "Low Stock"
+              : "Out of Stock"}
+        </Badge>
       </div>
-      <CardContent className="pt-4 flex-grow space-y-3">
-        <div className="space-y-2">
-          <Badge variant="secondary" className="capitalize font-medium">
-            {product.category}
-          </Badge>
-          <h3 className="font-semibold text-base line-clamp-2 leading-tight">
-            {product.title}
-          </h3>
-          <div className="flex items-center gap-2">
-            <p className="font-bold text-lg">
-              {formatCurrency(product.price)}
+
+      <CardContent className="flex-1 p-4">
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-muted-foreground capitalize">
+              {product.category}
             </p>
+            <h3 className="font-medium line-clamp-2 mt-1">{product.title}</h3>
           </div>
-          <StarRating rating={product.rating?.rate || 0} size={16} />
+
+          <div className="flex items-center space-x-1">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className={`h-3.5 w-3.5 ${
+                  i < Math.floor(product.rating.rate)
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+            <span className="text-xs text-muted-foreground">
+              ({product.rating.count})
+            </span>
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="pt-0 pb-4">
-        <StockBadge stock={product.stock} />
+
+      <CardFooter className="px-4 py-3 border-t flex justify-between items-center">
+        <p className="font-semibold">{formatCurrency(product.price)}</p>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 text-xs"
+          onClick={(e) => {
+            e.stopPropagation();
+            // View details (redundant as card click also handles this)
+          }}
+        >
+          View Details
+        </Button>
       </CardFooter>
     </Card>
   );
